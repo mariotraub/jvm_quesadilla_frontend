@@ -26,6 +26,8 @@ import java.net.URI
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
+const val BASE_URL = "https://localhost:8080"
+
 val json = Json { isLenient = true; ignoreUnknownKeys = true }
 
 @Composable
@@ -94,7 +96,7 @@ fun App() {
 fun searchFiles(query: String): List<File> {
     return try {
         val queryBase64 = Base64.encode(query.toByteArray())
-        val url = URI("http://localhost:8080/file/${queryBase64}").toURL()
+        val url = URI("$BASE_URL/file/${queryBase64}").toURL()
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
 
@@ -113,7 +115,7 @@ suspend fun startCaching(query: String) {
     withContext(Dispatchers.IO) {
         try {
             val queryBase64 = Base64.encode(query.toByteArray())
-            val url = URI("http://localhost:8080/cache/update/${queryBase64}").toURL()
+            val url = URI("$BASE_URL/cache/update/${queryBase64}").toURL()
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "PUT"
 
